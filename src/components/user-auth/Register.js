@@ -45,7 +45,7 @@ const Register = (props) => {
         validationSchema,
         onSubmit : (values) => {
             const redirect = () => {
-                history.push('login')
+                history.push('/login')
             }
             dispatch(startRegisterUser(values,redirect))
         }
