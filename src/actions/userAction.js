@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const startRegisterUser = (userData, history) => {
+const startRegisterUser = (userData, redirect) => {
     return (dispatch) => {
         axios.post('https://dct-user-auth.herokuapp.com/users/register', userData) 
             .then((response) => {
@@ -9,8 +9,8 @@ const startRegisterUser = (userData, history) => {
                     dispatch(errorsRegister(result.errors))
                 }else{
                     alert('Sucessfully registered')
+                    redirect()
                     dispatch(errorsRegister({}))
-                    history.push('/login')
                 }
             })
     }

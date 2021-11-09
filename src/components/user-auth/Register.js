@@ -1,9 +1,9 @@
-import React,{ useState, useEffect } from 'react'
+import React,{ useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useFormik } from 'formik'
+import * as yup from 'yup'
 
 import { startRegisterUser, errorsRegister } from '../../actions/userAction'
-
-import runValidations from '../helperfunctions/runValidations'
 
 import Heading from '../common-comp/Heading'
 import InputField from '../common-comp/InputField'
@@ -11,84 +11,82 @@ import Button from './Button'
 
 const Register = (props) => {
     const { history } = props
-    const [ userName, setUserName ] = useState('')
-    const [ email, setEmail ] = useState('')
-    const [ password, setPassword ] = useState('')
-    const [ formErrors, setFormErrors ] = useState({})
 
     const dispatch = useDispatch()
 
     const error = useSelector((state) => {
         return state.user.errors
     })
-    
+
     useEffect(() => {
-        if( Object.keys(error).length > 0 ){
-            setFormErrors(error)
-        }
         return () => {
             dispatch(errorsRegister({}))
         }
+    },[])
+    
+    useEffect(() => {
+        if( Object.keys(error).length > 0 ){
+            setErrors(error)
+        }
     },[error])
 
-    const handleChange = (e) => {
-        if( e.target.name === 'user-name' ){
-            setUserName(e.target.value)
-        }else if( e.target.name === 'email' ){
-            setEmail(e.target.value)
-        }else if( e.target.name === 'password' ){
-            setPassword(e.target.value)
-        }
-    }
+    const validationSchema = yup.object({
+        username: yup.string().required('Cannot be Blank'),
+        email : yup.string().email('Email is Invalid').required('Required'),
+        password : yup.string().min(6,'Password is short').max(128).required('Required')
+    })
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        console.log(password)
-        const errors = runValidations(userName,email,password)
-
-        if( Object.keys(errors).length === 0 ){
-            setFormErrors({})
-            const userData = {
-                username : userName,
-                email : email,
-                password : password
+    const { handleSubmit, handleChange, handleBlur, touched, errors, setErrors, values } = useFormik({
+        initialValues : {
+            username : '',
+            email : '',
+            password : ''
+        },
+        validationSchema,
+        onSubmit : (values) => {
+            const redirect = () => {
+                history.push('login')
             }
-            dispatch(startRegisterUser(userData,history))
-        }else {
-            setFormErrors(errors)
+            dispatch(startRegisterUser(values,redirect))
         }
-    }
+    })
 
     return (
         <div className="input-field-container">
             <Heading headingType="h2" title="Register With Us →" />
             <form onSubmit={handleSubmit}>
                 <InputField 
+                    id="username"
+                    name="username" 
                     type="text" 
-                    value={userName} 
-                    name="user-name" 
+                    value={values.username} 
                     placeholder="Enter Username" 
                     className="input-field" 
-                    formErrors={formErrors.username}
+                    handleBlur={handleBlur}
                     handleChange={handleChange} 
+                    formErrors={ touched.username && errors.username ? errors.username : ''}
                 /><br />
                 <InputField 
-                    type="text" 
-                    value={email} 
+                    id="email"
                     name="email" 
+                    type="text" 
+                    value={values.email} 
                     placeholder="Enter Email" 
                     className="input-field" 
-                    formErrors={formErrors.email}
+                    handleBlur={handleBlur}
                     handleChange={handleChange} 
+                    formErrors={touched.email && errors.email ? errors.email : '' }
                 /><br />
                 <InputField 
-                    type="password" 
-                    value={password} 
+                    id="password"
                     name="password" 
+                    type="password" 
+                    value={values.password} 
                     placeholder="Enter Password" 
-                    className="input-field" 
-                    formErrors={formErrors.password}
+                    className="input-field"
+                    handleBlur={handleBlur} 
                     handleChange={handleChange} 
+                    formErrors={ touched.password && errors.password ? errors.password : ''}
                 /><br />
                 <InputField 
                     type="submit" 
