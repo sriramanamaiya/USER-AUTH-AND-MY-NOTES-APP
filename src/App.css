@@ -1,0 +1,246 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif;
+    color: #444;
+    letter-spacing: 1px;
+}
+
+/* App Comp */
+.main-container {
+    border-top: 5px solid #1098ad;
+    width: 1000px;
+    margin: 5px auto;
+}
+
+/* Home Comp */
+.nav-bar {
+    background-color: #e0e0e0;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    padding: 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.main-heading {
+    text-transform: uppercase;
+    margin-left: 10px;
+    font-weight: bold;
+    font-size: 26px;
+    color: #b84fce;
+}
+
+.navigation a:link, .navigation a:visited {
+    margin-right: 30px;
+    color: #1098ad;
+    font-size: 18px;
+}
+
+.navigation a:hover, .navigation a:active {
+    color: #002f36;
+    font-size: 20px;
+    text-decoration: none;
+}
+
+/* Register Comp & Login Comp */
+.input-field-container {
+    text-align: center;
+}
+
+.input-field {
+    width: 25%;
+    padding: 14px 18px;
+    margin: 10px 0;
+    border: 2px solid #14bdd3;
+    border-radius: 4px;
+}
+
+.input-field:focus {
+    outline: none;
+    border: 2px solid #0c0c0c;
+}
+
+.button {
+    padding: 8px 16px;
+    margin-right: 10px;
+    border-radius: 5px;
+    background-color: #0D6EFD;
+    color: whitesmoke;
+    margin-top: 8px;
+    border-color: transparent;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #09449c ;
+}
+
+.button:active {
+    border: 2px solid #464343;
+}
+
+.errors {
+    color: #740611;
+}
+
+/* Cancel Comp */
+.cancel-button {
+    padding: 8px 16px;
+    border-radius: 5px;
+    background-color: #6C757D;
+    color: whitesmoke;
+    margin-top: 8px;
+    border-color: transparent;
+    cursor: pointer;
+}
+
+.cancel-button:hover {
+    background-color: #5e5f61;
+}
+
+.cancel-button:active {
+    border: 2px solid #4c79a7;
+}
+
+/* Login Comp */
+.login-errors {
+    margin: 8px 0;
+    color: #740611;
+}
+
+/* Account Comp */
+.account {
+    margin-left: 25px; 
+}
+
+.account-heading {
+    text-decoration: underline;
+    color: tomato;
+    margin-bottom: 10px;
+}
+
+.account-info {
+    margin-bottom: 8px;
+}
+
+.account-info::first-letter {
+    text-transform: uppercase;
+}
+
+.account-info:last-child {
+    margin-bottom: 0;
+}
+
+.spinner-account {
+    margin: 60px;
+}
+
+/* My Notes Comp */
+.heading-notes {
+    margin-bottom: 30px;
+    text-decoration: underline;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* NotesContainer Comp */
+.notes-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 200px;
+}
+
+/* NoteList Comp */
+.notelist {
+    flex: 1;
+}
+
+.no-notes {
+    color: #1b7a83;
+    font-size: 15px;
+}
+
+/* NoteForm*/
+.note-form {
+    flex: 1;
+}
+
+.add-notes-heading {
+    font-size: 15px;
+    font-weight: bold;
+    color: darkorange;
+}
+
+.note-field {
+    width: 75%;
+    padding: 8px 16px;
+    margin: 8px 0;
+    border: 2px solid #e92872;
+    border-radius: 4px;
+}
+
+/* NoteItem Comp */
+.delete-button {
+    padding: 1px 5px;
+    margin-right: 10px;
+    border-radius: 5px;
+    background-color: #DC3545;
+    color: whitesmoke;
+    margin-top: 8px;
+    border-color: transparent;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    background-color: #740611 ;
+}
+
+.delete-button:active {
+    border-color: #f3f4f5;
+}
+
+.edit-button {
+    padding: 1px 3px;
+    border-radius: 5px;
+    background-color: #6C757D;
+    color: whitesmoke;
+    margin-top: 8px;
+    border-color: transparent;
+    cursor: pointer;
+}
+
+.edit-button:hover {
+    background-color: #616263;
+}
+
+.edit-button:active {
+    border-color: #f3f4f5;
+}
+
+.title-note {
+    background-color: lightgreen;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px;
+    margin-bottom: 0; 
+}
+
+.title-note:hover {
+    background-color: #c3e4c3;
+}
+
+.note-item-comp {
+    margin-bottom: 20px;
+}
+
+/* ViewNote */
+.spinner {
+    margin: 0 auto;
+}
