@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { startDeleteNote, startShowSingleNote, isLoading } from '../../actions/myNotesaction'
+import { startDeleteNote, startShowSingleNote } from '../../actions/notesAction'
 
 import Paragraph from '../common-comp/Paragraph'
-import Button from './Button'
+import Button from '../common-comp/Button'
 import NoteForm from './NoteForm'
 import ViewNote from './ViewNote'
 
@@ -27,7 +27,6 @@ const NoteItem = (props) => {
     }
 
     const handleShow = () => {
-        dispatch(isLoading())
         dispatch(startShowSingleNote(_id))
         setShow(true)
     }
@@ -41,14 +40,14 @@ const NoteItem = (props) => {
             { toggle ? (
                 <>
                     <NoteForm id={_id} title={title} body={body} handleToggle={handleToggle} />
-                    <Button name="Cancel" className="cancel-button" handle={handleToggle} />
+                    <Button name="Cancel" className="cancel-button" handleClick={handleToggle} />
                 </>
             ) : (
                 <>
                     <Paragraph title={title} className="title-note" handleShow={handleShow} />
-                    <Button name="X" className="delete-button" handle={handleClick} />
-                    <Button name="Edit" className="edit-button" handle={handleToggle} />
-                    <ViewNote show={show} handleShowClose={handleShowClose} />
+                    <Button name="X" className="delete-button" handleClick={handleClick} />
+                    <Button name="Edit" className="edit-button" handleClick={handleToggle} />
+                    { show && <ViewNote show={show} handleShowClose={handleShowClose} /> }
                 </>
             )}
         </div>

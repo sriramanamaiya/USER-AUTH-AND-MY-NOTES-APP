@@ -7,7 +7,7 @@ import { startRegisterUser, errorsRegister } from '../../actions/userAction'
 
 import Heading from '../common-comp/Heading'
 import InputField from '../common-comp/InputField'
-import Button from './Button'
+import Button from '../common-comp/Button'
 
 const Register = (props) => {
     const { history } = props
@@ -29,6 +29,10 @@ const Register = (props) => {
             setErrors(error)
         }
     },[error])
+
+    const cancelBtn = () => {
+        history.push('/')
+    }
 
     const validationSchema = yup.object({
         username: yup.string().required('Cannot be Blank'),
@@ -93,7 +97,7 @@ const Register = (props) => {
                     value="Register"
                     className="button"
                 />
-                <Button />
+                <Button type="button" className="cancel-button" handleClick={cancelBtn} name="Cancel" />
             </form>
         </div>
     )

@@ -13,7 +13,7 @@ const ViewNote = (props) => {
     const { isLoading, note } = singleNote
 
     return (
-        <div>
+        <>
             <Dialog
                 fullWidth={true}
                 open={show}
@@ -37,7 +37,7 @@ const ViewNote = (props) => {
                 </>
                 ) }
             </Dialog>
-        </div>
+        </>
     )
 }
 

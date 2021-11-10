@@ -7,7 +7,7 @@ import { startLoginUser, errorsLogin } from '../../actions/userAction'
 
 import Heading from '../common-comp/Heading'
 import InputField from '../common-comp/InputField'
-import Button from './Button'
+import Button from '../common-comp/Button'
 import Paragraph from '../common-comp/Paragraph'
 
 const Login = (props) => {
@@ -31,6 +31,10 @@ const Login = (props) => {
         }
     },[error])
 
+    const redirect = () => {
+        history.push('/')
+    }
+
     const validationSchema = yup.object({
         email : yup.string().email('Email is Invalid').required('Required'),
         password : yup.string().required('Required')
@@ -43,9 +47,6 @@ const Login = (props) => {
         },
         validationSchema,
         onSubmit : (values) => {
-            const redirect = () => {
-                history.push('/')
-            }
             dispatch(startLoginUser(values,redirect))
         }
     })
@@ -82,7 +83,7 @@ const Login = (props) => {
                     value="LogIn" 
                     className="button"
                 />
-                <Button />
+                <Button type="button" className="cancel-button" handleClick={redirect} name="Cancel" />
             </form>
         </div>
     )

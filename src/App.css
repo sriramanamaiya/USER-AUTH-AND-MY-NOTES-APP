@@ -18,6 +18,12 @@ body {
 }
 
 /* Home Comp */
+.spinner-home {
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
+}
+
 .nav-bar {
     background-color: #e0e0e0;
     margin-top: 10px;

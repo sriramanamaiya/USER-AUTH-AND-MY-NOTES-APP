@@ -1,31 +1,35 @@
 import React from 'react'
+import { Redirect } from 'react-router'
 import { useSelector } from 'react-redux'
-import { CircularProgress } from '@mui/material'
+
+import userAuth from '../helperfunctions/userAuth'
 
 import Heading from '../common-comp/Heading'
 import ListItem from './ListItem'
 
 const Account = (props) => {
-    const userDetails = useSelector((state) => {
-        return state.user
+    const userData = useSelector((state) => {
+        return state.user.data
     })
-
-    const { isLoading, data } = userDetails
 
     return (
         <div className="account">
-            { isLoading ? (
-                <CircularProgress className="spinner-account" />
-            ) : (
+            { userAuth() ? (
+                <Redirect to="/login" />
+            ): (
                 <>
-                    <Heading headingType="h4" title="Account Details →" className={"account-heading"} />
-                    <ul>
-                        { Object.keys(data).map((ele,i) => {
-                            return (
-                                <ListItem key={i} prop={ele} title={data[ele]} />
-                            )
-                        }) }
-                    </ul>
+                    { Object.keys(userData).length > 0 && (
+                        <>
+                            <Heading headingType="h4" title="Account Details →" className="account-heading" />
+                            <ul>
+                                { Object.keys(userData).map((ele,i) => {
+                                    return (
+                                        <ListItem key={i} prop={ele} title={userData[ele]} />
+                                    )
+                                }) }
+                            </ul>
+                        </>
+                    ) }
                 </>
             ) }
         </div>

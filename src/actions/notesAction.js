@@ -1,23 +1,5 @@
 import axios from 'axios'
 
-const startGetUserNotes = (token) => {
-    return (dispatch) => {
-        axios.get('https://dct-user-auth.herokuapp.com/api/notes', {
-            headers : {
-                'x-auth' : token
-            }
-        })
-            .then((response) => {
-                const result = response.data
-                dispatch(isLoading())
-                dispatch(userNotes(result.reverse()))
-            })
-            .catch((err) => {
-                alert(err.message)
-            })
-    }
-}
-
 const userNotes = (notes) => {
     return {
         type : 'USER_NOTES',
@@ -25,13 +7,7 @@ const userNotes = (notes) => {
     }
 }
 
-const isLoading = () => {
-    return {
-        type : 'LOADING'
-    }
-}
-
-const startAddNote = (userNote) => {
+const startAddNote = (userNote, resetForm) => {
     return (dispatch) => {
         axios.post('https://dct-user-auth.herokuapp.com/api/notes',userNote,{
             headers : {
@@ -44,6 +20,7 @@ const startAddNote = (userNote) => {
                     dispatch(errorNotes(result.errors))
                 }else {
                     dispatch(addNote(result))
+                    resetForm()
                 }
             })
             .catch((err) => {
@@ -54,7 +31,7 @@ const startAddNote = (userNote) => {
 
 const errorNotes = (errors) => {
     return {
-        type : 'ERROR_NOTES',
+        type : 'ERROR-NOTES',
         payload : errors
     }
 }
@@ -117,6 +94,7 @@ const editNote = (note) => {
 
 const startShowSingleNote = (id) => {
     return (dispatch) => {
+        dispatch(loadingNotes())
         axios.get(`https://dct-user-auth.herokuapp.com/api/notes/${id}`, {
             headers : {
                 'x-auth' : localStorage.getItem('token')
@@ -124,7 +102,7 @@ const startShowSingleNote = (id) => {
         })
             .then((response) => {
                 const result = response.data
-                dispatch(isLoading())
+                dispatch(loadingNotes())
                 dispatch(showSingleNote(result))
             })
             .catch((err) => {
@@ -140,4 +118,10 @@ const showSingleNote = (note) => {
     }
 }
 
-export { startGetUserNotes, startAddNote, startDeleteNote, startEditNote, startShowSingleNote, userNotes, isLoading }
+const loadingNotes = () => {
+    return {
+        type : 'LOADING-NOTES'
+    }
+}
+
+export { startAddNote, startDeleteNote, startEditNote, startShowSingleNote, userNotes, errorNotes }

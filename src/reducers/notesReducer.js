@@ -1,13 +1,13 @@
-const myNotesInitialState = {
+const notesInitialState = {
     isLoading : false,
     data : [],
     note : {},
     errors : {}
 }
 
-const myNotesReducer = ( state = myNotesInitialState, action ) => {
+const notesReducer = ( state = notesInitialState, action ) => {
     switch(action.type) {
-        case 'LOADING' : {
+        case 'LOADING-NOTES' : {
             return { ...state, isLoading : !state.isLoading }
         }
         case 'ERROR-NOTES' : {
@@ -48,4 +48,4 @@ const myNotesReducer = ( state = myNotesInitialState, action ) => {
     }
 }
 
-export default myNotesReducer
+export default notesReducer

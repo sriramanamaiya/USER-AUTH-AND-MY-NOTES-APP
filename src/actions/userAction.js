@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { userNotes, isLoading } from './myNotesaction'
+import { userNotes } from './notesAction'
 
 const startRegisterUser = (userData, redirect) => {
     return (dispatch) => {
@@ -65,14 +65,12 @@ const startGetAccountDetailsUserNotes = (token) => {
 
     return (dispatch) => {
         dispatch(loadingUser())
-        dispatch(isLoading())
         Promise.all([urlAccount,urlNotes])
             .then((response) => {
                 const [ account, notes ] = response
                 dispatch(loadingUser())
-                dispatch(isLoading())
                 dispatch( accountDetails(account.data))
-                dispatch( userNotes(notes.data) )
+                dispatch( userNotes(notes.data.reverse()) )
             })
             .catch((err) => {
                 alert(err.message)

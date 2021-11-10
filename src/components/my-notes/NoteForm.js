@@ -1,90 +1,83 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useFormik } from 'formik'
+import * as yup from 'yup'
 
-import { startAddNote, startEditNote } from '../../actions/myNotesaction'
+import { startAddNote, startEditNote, errorNotes } from '../../actions/notesAction'
+
 import Heading from '../common-comp/Heading'
-
 import InputField from '../common-comp/InputField'
 import TextArea from './TextArea'
 
 const NoteForm = (props) => {
     const { id, title : noteTitle, body: noteBody, handleToggle } = props
 
-    const [ title, setTitle ] = useState( noteTitle ? noteTitle : '')
-    const [ body, setBody ] = useState( noteBody ? noteBody : '')
-    const [ formErrors, setFormErrors ] = useState({})
-    const errors = {}
-
     const dispatch = useDispatch()
 
-    const notesData = useSelector((state) => {
-        return state.notes
+    const notesErrors = useSelector((state) => {
+        return state.notes.errors
     })
 
-    const { data, errors : error } = notesData
+    useEffect(() => {
+        return () => {
+            dispatch(errorNotes({}))
+        }
+    },[])
 
     useEffect(() => {
-        if( Object.keys(error).length > 0 ){
-            setFormErrors(error)
+        if( Object.keys(notesErrors).length > 0 ){
+            setErrors(notesErrors)
         }
-    },[error])
+    },[notesErrors])
 
-    const handleChange = (e) => {
-        if( e.target.name === 'title' ){
-            setTitle(e.target.value)
-        }else if( e.target.name === 'body' ){
-            setBody(e.target.value)
+    useEffect(() => {
+        if( noteTitle ){
+            setValues({
+                title : noteTitle,
+                body : noteBody
+            })
         }
-    }
+    },[noteTitle,noteBody])
 
-    const runValidations = () => {
-        if( title.trim().length === 0 ){
-            errors.title = 'Title Cannot be Blank'
-        }
-    }
+    const validationSchema = yup.object({
+        title : yup.string().required('Required')
+    })
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-
-        runValidations()
-
-        if( Object.keys(errors).length === 0 ){
-            setFormErrors({})
-            const userNote = {
-                title : title,
-                body : body
-            }
-
+    const { handleChange, handleSubmit, handleBlur, values, errors, setErrors, setValues  } = useFormik({
+        initialValues : {
+            title : '',
+            body : ''
+        },
+        validationSchema,
+        validateOnChange : false,
+        onSubmit : (values, { resetForm }) => {
             if( id ){
-                dispatch(startEditNote(id, userNote, handleToggle))
+                dispatch(startEditNote(id, values, handleToggle))
             }else{
-                dispatch(startAddNote(userNote))
-                if( data.length > 0 ){
-                    setTitle('')
-                    setBody('')
-                }
+                dispatch(startAddNote(values, resetForm))
             }
-        }else {
-            setFormErrors(errors)
         }
-    }
+    })
 
     return (
         <div className="note-form">
             <Heading headingType="h5" title="Add Note" className="add-notes-heading" />
             <form onSubmit={handleSubmit}>
                 <InputField 
-                    type="text"
-                    value={title}
+                    id="title"
                     name="title"
+                    type="text"
+                    value={values.title}
                     placeholder="Title"
                     className="note-field"
-                    formErrors={formErrors.title}
+                    handleBlur={handleBlur}
                     handleChange={handleChange}
+                    formErrors={errors.title}
                 /><br />
                 <TextArea 
-                    value={body}
+                    id="body"
                     name="body"
+                    value={values.body}
                     placeholder="Body"
                     className="note-field"
                     handleChange={handleChange}
