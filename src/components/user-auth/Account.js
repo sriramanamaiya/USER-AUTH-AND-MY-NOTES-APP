@@ -1,31 +1,16 @@
+import React from 'react'
+import { useSelector } from 'react-redux'
 import { CircularProgress } from '@mui/material'
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
-import { startAccountDetails, loading } from '../../actions/userAction'
 import Heading from '../common-comp/Heading'
 import ListItem from './ListItem'
 
 const Account = (props) => {
-    const { history } = props
-    const dispatch = useDispatch()
-
     const userDetails = useSelector((state) => {
         return state.user
     })
 
     const { isLoading, data } = userDetails
-   
-    useEffect(() => {
-        const token = localStorage.getItem('token')
-        if( token ){
-            dispatch(loading())
-            dispatch(startAccountDetails(token))
-        }else{
-            console.log('1')
-            history.push('/login')
-        }
-    },[])
 
     return (
         <div className="account">

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { userNotes, isLoading } from './myNotesaction'
 
 const startRegisterUser = (userData, redirect) => {
     return (dispatch) => {
@@ -23,7 +24,7 @@ const errorsRegister = (error) => {
     }
 }
 
-const startLoginUser = (userData, history) => {
+const startLoginUser = (userData, redirect) => {
     return (dispatch) => {
         axios.post('https://dct-user-auth.herokuapp.com/users/login', userData)
             .then((response) => {
@@ -33,9 +34,8 @@ const startLoginUser = (userData, history) => {
                 }else{
                     alert('Sucessfully logged In')
                     localStorage.setItem('token',result.token)
-                    dispatch(loginAuth())
-                    // handleAuth()
-                    history.push('/')
+                    dispatch(startGetAccountDetailsUserNotes(result.token))
+                    redirect()
                 }
             })
             .catch((err) => {
@@ -51,26 +51,31 @@ const errorsLogin = (error) => {
     }
 }
 
-const loginAuth = () => {
-    return {
-        type : 'LOGIN-AUTH'
-    }
-}
+const startGetAccountDetailsUserNotes = (token) => {
+    const urlAccount = axios.get('https://dct-user-auth.herokuapp.com/users/account',{
+        headers : {
+            'x-auth' : token 
+        }
+    }),
+    urlNotes = axios.get('https://dct-user-auth.herokuapp.com/api/notes', {
+        headers : {
+            'x-auth' : token
+        }
+    })
 
-const startAccountDetails = (token) => {
     return (dispatch) => {
-        axios.get('https://dct-user-auth.herokuapp.com/users/account',{
-            headers : {
-                'x-auth' : token 
-            }
-        })
-            .then((response) =>{
-                const result = response.data
-                dispatch(loading())
-                dispatch(accountDetails(result))
+        dispatch(loadingUser())
+        dispatch(isLoading())
+        Promise.all([urlAccount,urlNotes])
+            .then((response) => {
+                const [ account, notes ] = response
+                dispatch(loadingUser())
+                dispatch(isLoading())
+                dispatch( accountDetails(account.data))
+                dispatch( userNotes(notes.data) )
             })
             .catch((err) => {
-               alert(err.message)
+                alert(err.message)
             })
     }
 }
@@ -82,10 +87,10 @@ const accountDetails = (userData) => {
     }
 }
 
-const loading = () => {
+const loadingUser = () => {
     return {
-        type : 'LOADING'
+        type : 'LOADING-USER'
     }
 }
 
-export { startRegisterUser, startLoginUser, startAccountDetails, loginAuth, loading, errorsRegister }
+export { startRegisterUser, startLoginUser, startGetAccountDetailsUserNotes, accountDetails, errorsRegister, errorsLogin }

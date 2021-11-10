@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { CircularProgress } from '@mui/material'
 
-import { loginAuth } from '../../actions/userAction'
+import { accountDetails, startGetAccountDetailsUserNotes } from '../../actions/userAction'
 
 import Heading from '../common-comp/Heading'
 
@@ -11,16 +12,28 @@ const Home = (props) => {
 
     const dispatch = useDispatch()
 
-    const isLoggedIn = useSelector((state) =>{
-        return state.user.isLoggedIn
+    const userData = useSelector((state) =>{
+        return state.user
     })
+
+    const { isLoading, data } = userData
+
+    useEffect(() => {
+        const token = localStorage.getItem('token')
+        if( token ){
+            dispatch(startGetAccountDetailsUserNotes(token))
+        }
+    },[])
 
     const handleClick = () => {
         localStorage.removeItem('token')
         alert('Sucessfully Logged Out')
-        dispatch(loginAuth())
-        //handleAuth()
+        dispatch(accountDetails({}))
         history.push('/')
+    }
+
+    if( isLoading ){
+        return <CircularProgress className="spinner-home" />
     }
     
     return (
@@ -28,7 +41,7 @@ const Home = (props) => {
             <Heading headingType="h1" title="User-Auth & Notes 🗒️" className={"main-heading"}/>
             <nav className="navigation">
                 <Link to="/" >Home</Link>
-                { isLoggedIn ? (
+                { Object.keys(data).length > 0 ? (
                     <>
                         <Link to="/account" >Account</Link>
                         <Link to="/mynotes">My Notes</Link>

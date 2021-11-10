@@ -140,4 +140,4 @@ const showSingleNote = (note) => {
     }
 }
 
-export { startGetUserNotes, startAddNote, startDeleteNote, startEditNote, startShowSingleNote, isLoading }
+export { startGetUserNotes, startAddNote, startDeleteNote, startEditNote, startShowSingleNote, userNotes, isLoading }

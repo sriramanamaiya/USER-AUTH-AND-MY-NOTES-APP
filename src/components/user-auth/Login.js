@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useFormik } from 'formik'
+import * as yup from 'yup'
 
-import { startLoginUser } from '../../actions/userAction'
-
-import runValidations from '../helperfunctions/runValidations'
+import { startLoginUser, errorsLogin } from '../../actions/userAction'
 
 import Heading from '../common-comp/Heading'
 import InputField from '../common-comp/InputField'
@@ -12,9 +12,6 @@ import Paragraph from '../common-comp/Paragraph'
 
 const Login = (props) => {
     const { history } = props
-    const [ email, setEmail ] = useState('')
-    const [ password, setPassword ] = useState('')
-    const [ formErrors, setFormErrors ] = useState('')
 
     const dispatch = useDispatch()
 
@@ -23,58 +20,62 @@ const Login = (props) => {
     })
 
     useEffect(() => {
+        return () => {
+            dispatch(errorsLogin({}))
+        }
+    },[])
+
+    useEffect(() => {
         if( Object.keys(error).length > 0){
-            setFormErrors(error)
+            setErrors(error)
         }
     },[error])
 
-    const handleChange = (e) => {
-        if( e.target.name === 'email' ){
-            setEmail(e.target.value)
-        }else if( e.target.name === 'password' ){
-            setPassword(e.target.value)
-        }
-    }
+    const validationSchema = yup.object({
+        email : yup.string().email('Email is Invalid').required('Required'),
+        password : yup.string().required('Required')
+    })
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-
-        const errors = runValidations(email, password)
-        
-        if( Object.keys(errors).length === 0 ){
-            setFormErrors({})
-            const loginData = {
-                email : email,
-                password : password
+    const { handleChange, handleBlur, handleSubmit, values, touched, errors, setErrors  } = useFormik({
+        initialValues : {
+            email : '',
+            password : ''
+        },
+        validationSchema,
+        onSubmit : (values) => {
+            const redirect = () => {
+                history.push('/')
             }
-            dispatch(startLoginUser(loginData,history))
-        }else {
-            setFormErrors(errors)
+            dispatch(startLoginUser(values,redirect))
         }
-    }
+    })
 
     return (
         <div className="input-field-container">
             <Heading headingType="h2" title="Login to your account" />
-            { formErrors.errors && <Paragraph title={formErrors.errors} className={"login-errors"} />}
+            { errors.errors && <Paragraph title={errors.errors} className={"login-errors"} />}
             <form onSubmit={handleSubmit}>
                 <InputField 
-                    type="text" 
-                    value={email} 
+                    id="email"
                     name="email" 
+                    type="text" 
+                    value={values.email} 
                     placeholder="Enter Email"
                     className="input-field" 
-                    formErrors={formErrors.email}
+                    handleBlur={handleBlur}
                     handleChange={handleChange} 
+                    formErrors={ touched.email && errors.email ? errors.email : ''}
                 />< br />
                 <InputField 
-                    type="password" 
-                    value={password} 
+                    id="password"
                     name="password" 
+                    type="password" 
+                    value={values.password} 
                     placeholder="Enter Password"
                     className="input-field" 
-                    formErrors={formErrors.password}
+                    handleBlur={handleBlur}
                     handleChange={handleChange} 
+                    formErrors={ touched.password && errors.password ? errors.password : ''}
                 /><br />
                 <InputField 
                     type="submit" 
