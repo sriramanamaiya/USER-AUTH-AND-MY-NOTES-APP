@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { CircularProgress } from '@mui/material'
 import { Link } from 'react-router-dom'
 
-import { accountDetails } from '../../actions/userAction'
+import { logOut } from '../../actions/userAction'
 
 import Heading from '../common-comp/Heading'
 
@@ -21,7 +21,7 @@ const Home = (props) => {
     const handleClick = () => {
         localStorage.removeItem('token')
         alert('Sucessfully Logged Out')
-        dispatch(accountDetails({}))
+        dispatch(logOut())
         history.push('/')
     }
     

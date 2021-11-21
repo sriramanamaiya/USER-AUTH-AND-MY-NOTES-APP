@@ -34,7 +34,7 @@ const startLoginUser = (userData, redirect) => {
                 }else{
                     alert('Sucessfully logged In')
                     localStorage.setItem('token',result.token)
-                    dispatch(startGetAccountDetailsUserNotes(result.token))
+                    dispatch(startGetAccountAndUserNotes(result.token))
                     redirect()
                 }
             })
@@ -51,7 +51,7 @@ const errorsLogin = (error) => {
     }
 }
 
-const startGetAccountDetailsUserNotes = (token) => {
+const startGetAccountAndUserNotes = (token) => {
     const urlAccount = axios.get('https://dct-user-auth.herokuapp.com/users/account',{
         headers : {
             'x-auth' : token 
@@ -91,4 +91,10 @@ const loadingUser = () => {
     }
 }
 
-export { startRegisterUser, startLoginUser, startGetAccountDetailsUserNotes, accountDetails, errorsRegister, errorsLogin }
+const logOut = () => {
+    return {
+        type : 'LOG-OUT'
+    }
+}
+
+export { startRegisterUser, startLoginUser, startGetAccountAndUserNotes, accountDetails, errorsRegister, errorsLogin, logOut }

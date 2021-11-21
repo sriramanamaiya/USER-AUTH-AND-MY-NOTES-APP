@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { Route } from 'react-router-dom'
 
-import { startGetAccountDetailsUserNotes } from '../../actions/userAction'
+import { startGetAccountAndUserNotes } from '../../actions/userAction'
 
 import Home from './Home'
 import Register from '../user-auth/Register'
@@ -16,7 +16,7 @@ const RouteComp = (props) => {
     useEffect(() => {
         const token = localStorage.getItem('token')
         if( token ){
-            dispatch(startGetAccountDetailsUserNotes(token))
+            dispatch(startGetAccountAndUserNotes(token))
         }
     },[])
 

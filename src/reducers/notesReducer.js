@@ -42,6 +42,9 @@ const notesReducer = ( state = notesInitialState, action ) => {
         case 'SHOW-SINGLE-NOTE' : {
             return { ...state, note : {...action.payload} }
         }
+        case 'LOG-OUT' : {
+            return {...notesInitialState}
+        }
         default : {
             return { ...state }
         }

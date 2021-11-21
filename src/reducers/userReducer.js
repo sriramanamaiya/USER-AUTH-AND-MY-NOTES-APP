@@ -22,6 +22,9 @@ const userReducer = ( state = userInitialState, action ) => {
         case 'ACCOUNT-DETAILS' : {
             return { ...state, data : {...action.payload} }
         }
+        case 'LOG-OUT' : {
+            return {...userInitialState}
+        }
         default : {
             return {...state}
         }
