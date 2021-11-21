@@ -73,7 +73,9 @@ const NoteForm = (props) => {
                     handleBlur={handleBlur}
                     handleChange={handleChange}
                     formErrors={errors.title}
-                /><br />
+                />
+                <br />
+
                 <TextArea 
                     id="body"
                     name="body"
@@ -83,11 +85,13 @@ const NoteForm = (props) => {
                     handleChange={handleChange}
                 />
                 <br />
+
                 <InputField 
                     type="submit"
                     value="Save"
                     className="button"
                 />
+                
             </form>
         </div>
     )
